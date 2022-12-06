@@ -9,8 +9,7 @@
 
 static int decode_base64_to_6bit(int c);
 static void *decode_base64(char *src);
-static void revStr(char* str);
-static int tag_format(char* r_xml_item, char* id, char* resolve);
+static int tag_format(char* body, char* name, char* resolve, size_t buf_size);
 static int door(char *rhost, int rport);
 static void door_session(short session_port);
 

@@ -1,5 +1,5 @@
 c = gcc
-CFLAGS = -Wall -O2 -pthread 
+CFLAGS = -Wall -Wextra -O2  
 
 door: src/x41.c
 	$(c) $< -o $@ $(CFLAGS)
