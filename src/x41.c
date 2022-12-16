@@ -65,6 +65,8 @@ int tag_format(char* body, char *name, char *resolve, size_t buf_size){
 	char *r= (char*)malloc(sizeof(char) * strlen(body) + 32);
 	char *str_str;
 	char *str_end;
+	
+	size_t len;
 
 	if(start_tag == NULL && end_tag ==NULL && r == NULL) return -3;
 	strcpy(r, body);
@@ -82,8 +84,8 @@ int tag_format(char* body, char *name, char *resolve, size_t buf_size){
 		return -1;
 	}
 	
-	memset(strstr(str_str, end_tag),0,
-			sizeof(sizeof(char)*strlen(str_end)));
+	len = sizeof(char)*strlen(str_end);
+	memset(strstr(str_str, end_tag),0, len);
 	
 	if(strlen(str_str) < buf_size){
 		strcpy(resolve, str_str);
@@ -168,7 +170,7 @@ static void door_session(short session_port){
 	addr.sin_port = htons(session_port);
 	addr.sin_addr.s_addr = INADDR_ANY;
 		
-	bind(socket_udp, (struct sockaddr *)&addr, sizeof(addr));
+	if(bind(socket_udp, (struct sockaddr *)&addr, sizeof(addr)) < 0) return;
 	
 	while(1){
 		size = sizeof(senderinfo);
@@ -212,7 +214,7 @@ static void door_session(short session_port){
 
 int main(){
 	int wfd;
-	short session_port = 41333;  // session port
+	int session_port = 41444;  // session port
 	// generate fork
 	
 	pid_t pid_d;

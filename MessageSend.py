@@ -53,7 +53,7 @@ if __name__ == "__main__":
             lhost = "127.0.0.1",    # your ip address
             lport = 4444,           # your opne port
             rhost = "127.0.0.1",    # target host 
-            rport = 41333,          # target setting port 
+            rport = 41444,          # target setting port 
             session_pass= "admin",  # target door session password
             session_user = "admin"  # target door session user 
             )
